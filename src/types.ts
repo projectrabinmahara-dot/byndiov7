@@ -1,0 +1,89 @@
+// Shared types — imported by both store.ts and data.ts
+// This file must NOT import from store.ts or data.ts (that would recreate the cycle)
+
+export interface Product {
+  id: number | string;
+  name: string;
+  brand: string;
+  cat: string;
+  price: number;
+  mrp: number;
+  icon: string;
+  rating: number;
+  reviews: number;
+  inf: boolean;
+  creator?: string;
+  specs: [string, string][];
+  is_sponsored?: boolean;
+  flash_sale?: { discount_pct: number; ends_at: string; sale_price: number } | null;
+}
+
+export interface CartItem extends Product {
+  qty: number;
+  affiliate_code?: string;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'buyer' | 'seller' | 'influencer' | 'admin';
+  subscription_plan?: string;
+  reward_points?: number;
+}
+
+export interface SiteSettings {
+  id: number;
+  hero_title: string;
+  hero_subtitle: string;
+  footer_about: string;
+  contact_email: string;
+  contact_phone: string;
+  contact_address: string;
+}
+
+export interface Order {
+  id: string;
+  buyer_id: string;
+  total_amount: number;
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  payment_status: 'pending' | 'paid' | 'failed' | 'refunded';
+  shipping_address: Record<string, string>;
+  payment_method: string;
+  created_at: string;
+  order_items?: {
+    id: string;
+    quantity: number;
+    price: number;
+    products: { name: string; images: string[] } | null;
+  }[];
+}
+
+export interface AffiliateLink {
+  id: string;
+  user_id: string;
+  product_id: string;
+  link_code: string;
+  clicks: number;
+  conversions: number;
+  total_earnings: number;
+  commission_rate: number;
+  is_active: boolean;
+  created_at: string;
+  product?: { name: string; icon?: string; price?: number };
+}
+
+export interface FlashSale {
+  id: string;
+  title: string;
+  product_id: string;
+  discount_pct: number;
+  original_price: number;
+  sale_price: number;
+  max_quantity: number;
+  sold_quantity: number;
+  starts_at: string;
+  ends_at: string;
+  is_active: boolean;
+  product?: { name: string; images: string[] };
+}
