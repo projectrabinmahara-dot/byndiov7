@@ -282,24 +282,24 @@ END;
 $$;
 
 -- Performance indexes for production scale
-CREATE INDEX IF NOT EXISTS idx_orders_buyer_id ON public.orders(buyer_id);
-CREATE INDEX IF NOT EXISTS idx_orders_status ON public.orders(status);
-CREATE INDEX IF NOT EXISTS idx_orders_created_at ON public.orders(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON public.order_items(order_id);
-CREATE INDEX IF NOT EXISTS idx_order_items_seller_id ON public.order_items(seller_id);
-CREATE INDEX IF NOT EXISTS idx_order_items_product_id ON public.order_items(product_id);
-CREATE INDEX IF NOT EXISTS idx_products_seller_id ON public.products(seller_id);
-CREATE INDEX IF NOT EXISTS idx_products_category ON public.products(category);
-CREATE INDEX IF NOT EXISTS idx_products_is_active ON public.products(is_active);
-CREATE INDEX IF NOT EXISTS idx_wallets_user_id ON public.wallets(user_id);
-CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON public.notifications(user_id);
-CREATE INDEX IF NOT EXISTS idx_notifications_is_read ON public.notifications(user_id, is_read);
-CREATE INDEX IF NOT EXISTS idx_reward_points_user_id ON public.reward_points(user_id);
-CREATE INDEX IF NOT EXISTS idx_affiliate_links_user_id ON public.affiliate_links(user_id);
-CREATE INDEX IF NOT EXISTS idx_affiliate_links_code ON public.affiliate_links(link_code);
-CREATE INDEX IF NOT EXISTS idx_wishlists_user_id ON public.wishlists(user_id);
-CREATE INDEX IF NOT EXISTS idx_reviews_product_id ON public.reviews(product_id);
-CREATE INDEX IF NOT EXISTS idx_coupons_code ON public.coupons(code);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_orders_buyer_id ON public.orders(buyer_id);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_orders_status ON public.orders(status);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_orders_created_at ON public.orders(created_at DESC);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_order_items_order_id ON public.order_items(order_id);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_order_items_seller_id ON public.order_items(seller_id);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_order_items_product_id ON public.order_items(product_id);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_products_seller_id ON public.products(seller_id);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_products_category ON public.products(category);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_products_is_active ON public.products(is_active);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_wallets_user_id ON public.wallets(user_id);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_notifications_user_id ON public.notifications(user_id);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_notifications_is_read ON public.notifications(user_id, is_read);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_reward_points_user_id ON public.reward_points(user_id);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_affiliate_links_user_id ON public.affiliate_links(user_id);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_affiliate_links_code ON public.affiliate_links(link_code);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_wishlists_user_id ON public.wishlists(user_id);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_reviews_product_id ON public.reviews(product_id);
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_coupons_code ON public.coupons(code);
 
 -- ============================================================
 -- SECURITY: Fix sellers_public policy exposing bank details

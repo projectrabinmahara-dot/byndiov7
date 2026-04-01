@@ -2,30 +2,37 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 // These are read at RUNTIME in the browser, not at build time.
 // Netlify injects them as window.__env__ or directly via VITE_ prefix.
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
 // Check if properly configured
-const isConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+const isConfigured = supabaseUrl.length > 0 && supabaseAnonKey.length > 0;
 
-// Create client - always valid, but may use fallback URL
-export const supabase: SupabaseClient = isConfigured
-  ? createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-      },
-    })
-  : createClient(
-      'https://placeholder.supabase.co',
-      'placeholder-key',
-      { 
-        auth: { 
-          persistSession: false,
-          autoRefreshToken: false,
-        } 
+// Use placeholder values to prevent initialization errors
+// The client will be created but won't work without proper config
+const fallbackUrl = 'https://placeholder.supabase.co';
+const fallbackKey = 'placeholder.anon.key';
+
+export const supabase: SupabaseClient = createClient(
+  isConfigured ? supabaseUrl : fallbackUrl,
+  isConfigured ? supabaseAnonKey : fallbackKey,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+    },
+    global: {
+      // Prevent fetch errors from breaking the app
+      fetch: (url, options) => {
+        if (!isConfigured) {
+          console.warn('[BYNDIO] Supabase not configured - operations will be skipped');
+          return Promise.resolve(new Response(JSON.stringify({ error: 'Not configured' }), { status: 500 }));
+        }
+        return fetch(url, options);
       }
-    );
+    }
+  }
+);
 
 // Helper to check if Supabase is properly configured at runtime
 export const isSupabaseConfigured = (): boolean => isConfigured;
